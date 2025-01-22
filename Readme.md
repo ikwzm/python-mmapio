@@ -1,9 +1,10 @@
 python-mmapio
 ==================================================================================
 
-# Overview
+Overview
+----------------------------------------------------------------------------------
 
-## Introduction of python-mmapio
+### Introduction of python-mmapio
 
 A Python extension module written in C for low-level memory-mapped I/O accesses.
 
@@ -12,38 +13,40 @@ For example, if you try to read a 32-bit word using the read method of the mmap 
 
 python-mmapio solves these problems by being written in C.
 
-# Installation
+Installation
+----------------------------------------------------------------------------------
 
-## From source:
+### From source:
 
-### 1. Install required tools:
+#### 1. Install required tools:
 
  * GCC or Clang compiler
  * Python development headers (e.g., `python3-dev` on Linux)
 
-### 2. Clone the repository:
+#### 2. Clone the repository:
 
 ```console
 shell$ git clone https://github.com/ikwzm/python-mmapio.git
 shell$ cd python-mmapio
 ```
 
-### 3. Build and install the module:
+#### 3. Build and install the module:
 
 ```console
 shell$ python3 setup.py build_ext --inplace
 shell$ python3 setup.py install
 ```
 
-# Usage
+Usage
+----------------------------------------------------------------------------------
 
-## Importing the module:
+### Importing the module:
 
 ```python
 import mmapio
 ```
 
-## Example 1: Basic Usage
+### Example 1: Basic Usage
 
 ```console
 shell$ python3
@@ -63,7 +66,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> exit()
 ```
 
-## Example 2: Use uio.py
+### Example 2: Use uio.py
 
 ```python:uio.py
 import mmapio
@@ -174,6 +177,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> exit()
 ```
 
-# License
+License
+----------------------------------------------------------------------------------
 
 This project is licensed under the BSD 2-Clause License. See the [LICENSE](./LICENSE) file for details.
