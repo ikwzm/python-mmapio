@@ -1,4 +1,4 @@
-__version__     = "0.0.2"
+__version__     = "0.0.3"
 __author__      = "Ichiro Kawazome"
 __copyright__   = "Copyright (c) 2025 Ichiro Kawazome"
 __license__     = "BSD 2-Clause"
