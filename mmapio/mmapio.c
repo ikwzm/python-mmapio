@@ -34,7 +34,7 @@
 
 #define MODULE_NAME         "mmapio"
 #define OBJECT_NAME         "MemoryMappedIO"
-#define MODULE_VERSION      "0.0.1"
+#define MODULE_VERSION      "0.0.2"
 #define MODULE_AUTHOR       "Ichiro Kawazome"
 #define MODULE_AUTHOR_EMAIL "ichiro_k@ca2-so-net.ne.jp"
 #define MODULE_LICENSE      "BSD 2-Clause"
