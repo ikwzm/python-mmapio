@@ -21,7 +21,7 @@ assert description
 
 mmapio_name   = 'mmapio'
 mmapio_module = Extension(
-    f'{package_name}{mmapio_name}',
+    f'{package_name}.{mmapio_name}',
     sources = [f'{package_name}/mmapio.c'],
     define_macros = [('MODULE_NAME', mmapio_name)]
 )
