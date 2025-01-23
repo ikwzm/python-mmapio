@@ -19,9 +19,11 @@ assert author
 assert author_email
 assert description
 
+mmapio_name   = 'mmapio'
 mmapio_module = Extension(
-    f'{package_name}.mmapio',
+    f'{package_name}{mmapio_name}',
     sources = [f'{package_name}/mmapio.c'],
+    define_macros = [('MODULE_NAME', mmapio_name)]
 )
 
 setup(

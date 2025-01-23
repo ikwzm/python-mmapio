@@ -32,13 +32,22 @@
 #include <sys/mman.h>
 #include <unistd.h>
 
-#define MODULE_NAME         "mmapio"
-#define OBJECT_NAME         "MemoryMappedIO"
-#define MODULE_VERSION      "0.0.2"
+#ifndef MODULE_NAME
+#define MODULE_NAME         mmapio
+#endif
+#ifndef OBJECT_NAME
+#define OBJECT_NAME         MemoryMappedIO
+#endif
+#define MODULE_VERSION      "0.0.3"
 #define MODULE_AUTHOR       "Ichiro Kawazome"
 #define MODULE_AUTHOR_EMAIL "ichiro_k@ca2-so-net.ne.jp"
 #define MODULE_LICENSE      "BSD 2-Clause"
 #define MODULE_DESCRIPTION  "Memory Mapped I/O Module"
+
+#define TO_STR(x)           #x
+#define NAME_TO_STR(x)      TO_STR(x)
+#define MODULE_NAME_STRING  NAME_TO_STR(MODULE_NAME)
+#define OBJECT_NAME_STRING  NAME_TO_STR(OBJECT_NAME)
 
 typedef struct {
     PyObject_HEAD
@@ -201,13 +210,13 @@ mmapio_object_dealloc(mmapio_object* self)
 
 static PyTypeObject mmapio_type = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    .tp_name      = MODULE_NAME "." OBJECT_NAME,
+    .tp_name      = MODULE_NAME_STRING "." OBJECT_NAME_STRING,
     .tp_basicsize = sizeof(mmapio_object),
     .tp_dealloc   = (destructor)mmapio_object_dealloc,
     .tp_flags     = Py_TPFLAGS_DEFAULT,
     .tp_doc       = "Memory Mapped I/O Object \n\n"
-                    OBJECT_NAME "(buffer, offset, length) \n"
-                    "    Create a new " OBJECT_NAME " instance \n"
+                    OBJECT_NAME_STRING "(buffer, offset, length) \n"
+                    "    Create a new " OBJECT_NAME_STRING " instance \n"
                     "    buffer: buffer object \n"
                     "    offset: map offset (default=0)\n"
                     "    length: map size (default=buffer.length-offset)",
@@ -218,7 +227,7 @@ static PyTypeObject mmapio_type = {
 
 static struct PyModuleDef mmapio_module = {
     PyModuleDef_HEAD_INIT,
-    MODULE_NAME,
+    MODULE_NAME_STRING,
     MODULE_DESCRIPTION "\n"
     "License: " MODULE_LICENSE "\n"
     "Author:  " MODULE_AUTHOR  "\n"
@@ -227,7 +236,9 @@ static struct PyModuleDef mmapio_module = {
     NULL,
 };
 
-PyMODINIT_FUNC PyInit_mmapio(void) {
+#define PYINIT_FUNC_NAME(x) PyInit_ ## x
+#define PYINIT_FUNC(x) PyMODINIT_FUNC PYINIT_FUNC_NAME(x)(void) 
+PYINIT_FUNC(MODULE_NAME) {
     PyObject* m;
 
     if (PyType_Ready(&mmapio_type) < 0) {
@@ -240,7 +251,7 @@ PyMODINIT_FUNC PyInit_mmapio(void) {
     }
 
     Py_INCREF(&mmapio_type);
-    if (PyModule_AddObject(m, OBJECT_NAME, (PyObject*)&mmapio_type) < 0) {
+    if (PyModule_AddObject(m, OBJECT_NAME_STRING, (PyObject*)&mmapio_type) < 0) {
         Py_DECREF(&mmapio_type);
         Py_DECREF(m);
         return NULL;
