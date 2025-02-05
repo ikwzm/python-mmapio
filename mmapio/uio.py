@@ -5,6 +5,7 @@
 import mmap
 import os
 import glob
+import select
 import re
 from .mmapio import MemoryMappedIO
 
@@ -64,8 +65,14 @@ class Uio:
     def irq_off(self):
         os.write(self.device_file, bytes([0, 0, 0, 0]))
         
-    def wait_irq(self):
-        os.read(self.device_file, 4)
+    def wait_irq(self, timeout=None):
+        ready, _, _ = select.select([self.device_file], [], [], timeout)
+        if not ready:
+            return None
+        else:
+            bytes = os.read(self.device_file, 4)
+            count = int.from_bytes(bytes, byteorder="little", signed=True)
+            return count
 
     def regs(self, index=0, offset=0, length=None):
         if index in self.memmap_dict.keys():
