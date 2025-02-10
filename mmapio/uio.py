@@ -32,8 +32,8 @@ class Uio:
         elif name != None:
             self.name        = name
             self.device_name = Uio.find_device_by_name(self.name)
-        else:
-            raise ValueError("Invalid arguments name and device_name ")
+            if self.device_name == None:
+                raise ValueError("[{}.(name={})] Invalid device_name={} ".format(self.__class__.__name__, name, self.device_name))
         self.device_file = os.open('/dev/%s' % self.device_name, os.O_RDWR | os.O_SYNC)
         self.memmap_dict = {}
 
@@ -47,13 +47,14 @@ class Uio:
         return None
         
     def read_class_integer(self, name):
-        value = self.read_class_attribute(name)
-        if isinstance(value, str):
-            if   value.startswith("0x") or value.startswith("0X"):
-                return int(value, 16)
-            elif value.isdigit():
-                return int(value, 10)
-        raise ValueError("Invalid value %s in %s " % (value, file_name))
+        file_name = self.class_attribute_file_name(name)
+        with open(file_name, "r") as file:
+            value = file.readline().strip()
+        if   value.startswith("0x") or value.startswith("0X"):
+            return int(value, 16)
+        elif value.isdigit():
+            return int(value, 10)
+        raise ValueError("[{}.read_class_integer(name={})] Invalid value {} ".format(self.__class__.__name__, name, value))
         
     def get_map_addr(self, index=0):
         return self.read_class_integer('maps/map%d/addr'   % index)
@@ -111,5 +112,5 @@ class Uio:
         elif regs_offset + length <= mmap_size:
             regs_length = length
         else:
-            raise ValueError("region range error")
+            raise ValueError("[{}.regs(index={},offset={},length={})] region range error ".format(self.__class__.__name__, index, offset, length))
         return MemoryMappedIO(memmap, regs_offset, regs_length)
