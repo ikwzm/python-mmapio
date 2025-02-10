@@ -25,9 +25,15 @@ class Uio:
             f.close()
         return device_name
         
-    def __init__(self, name):
-        self.name        = name
-        self.device_name = Uio.find_device_by_name(self.name)
+    def __init__(self, name=None, device_name=None):
+        if   device_name != None:
+            self.device_name = device_name
+            self.name        = self.read_class_attribute("name")
+        elif name != None:
+            self.name        = name
+            self.device_name = Uio.find_device_by_name(self.name)
+        else:
+            raise ValueError("Invalid arguments name and device_name ")
         self.device_file = os.open('/dev/%s' % self.device_name, os.O_RDWR | os.O_SYNC)
         self.memmap_dict = {}
 
