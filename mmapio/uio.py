@@ -31,17 +31,22 @@ class Uio:
         self.device_file = os.open('/dev/%s' % self.device_name, os.O_RDWR | os.O_SYNC)
         self.memmap_dict = {}
 
-    def sys_class_file_name(self, name):
+    def class_attribute_file_name(self, name):
         return '/sys/class/uio/%s/%s' % (self.device_name, name)
 
-    def read_class_integer(self, name):
-        file_name = self.sys_class_file_name(name)
+    def read_class_attribute(self, name):
+        file_name = self.class_attribute_file_name(name)
         with open(file_name, "r") as file:
-            value = file.readline().strip()
-        if   value.startswith("0x") or value.startswith("0X"):
-            return int(value, 16)
-        elif value.isdigit():
-            return int(value, 10)
+            return file.readline().strip()
+        return None
+        
+    def read_class_integer(self, name):
+        value = self.read_class_attribute(name)
+        if isinstance(value, str):
+            if   value.startswith("0x") or value.startswith("0X"):
+                return int(value, 16)
+            elif value.isdigit():
+                return int(value, 10)
         raise ValueError("Invalid value %s in %s " % (value, file_name))
         
     def get_map_addr(self, index=0):
