@@ -13,21 +13,21 @@ class Uio:
     """A simple uio class"""
 
     @staticmethod
-    def find_device_file(device_name):
-        device_file = None
+    def find_device_by_name(name):
+        device_name = None
         r = re.compile("/sys/class/uio/(.*)/name")
-        for uio_device_name_file in glob.glob("/sys/class/uio/uio*/name"):
-            f = open(uio_device_name_file, "r")
-            uio_device_name = f.readline().strip()
-            if uio_device_name == device_name:
-                m = r.match(uio_device_name_file)
-                device_file = m.group(1)
+        for uio_name_file in glob.glob("/sys/class/uio/uio*/name"):
+            f = open(uio_name_file, "r")
+            uio_name = f.readline().strip()
+            if uio_name == name:
+                m = r.match(uio_name_file)
+                device_name = m.group(1)
             f.close()
-        return device_file
+        return device_name
         
     def __init__(self, name):
         self.name        = name
-        self.device_name = Uio.find_device_file(self.name)
+        self.device_name = Uio.find_device_by_name(self.name)
         self.device_file = os.open('/dev/%s' % self.device_name, os.O_RDWR | os.O_SYNC)
         self.memmap_dict = {}
 
